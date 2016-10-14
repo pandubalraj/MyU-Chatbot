@@ -1,0 +1,26 @@
+{
+  "name": "echobot",
+  "version": "1.0.0",
+  "description": "A sample bot for getting started with Bot Framework",
+  "main": "server.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pandubalraj/echobot.git"
+  },
+  "keywords": [
+    "botframework"
+  ],
+  "author": "Pandu Balraj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pandubalraj/echobot/issues"
+  },
+  "homepage": "https://github.com/pandubalraj/echobot#readme",
+  "dependencies": {
+    "botbuilder": "^3.2.3",
+    "restify": "^4.1.1"
+  }
+}
