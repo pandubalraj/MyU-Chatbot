@@ -7,34 +7,12 @@ var dialog = new builder.IntentDialog({
     recognizers: [recognizer]
 });
 
-// //------ Bot Connector - START ------//
-// // Get secrets from server environment
-// var connector = new builder.ChatConnector({
-//     appId: process.env.MICROSOFT_APP_ID,
-//     appPassword: process.env.MICROSOFT_APP_PASSWORD
-// });
-// var bot = new builder.UniversalBot(connector, {
-//     localizerSettings: {
-//         botLocalePath: "./node_modules/botbuilder/lib/locale",
-//         defaultLocale: "en"
-//     }
-// });
-// // Setup Restify Server
-// var server = restify.createServer();
-// // Handle Bot Framework messages
-// server.post('/api/messages', connector.listen());
-// // Serve a static web page
-// server.get(/.*/, restify.serveStatic({
-//     'directory': '.',
-//     'default': 'index.html'
-// }));
-// server.listen(process.env.port || process.env.PORT || 3978, function() {
-//     console.log('%s listening to %s', server.name, server.url);
-// });
-// //------ Bot Connector - END ------//
-
-//------ Console Connector - START ------//
-var connector = new builder.ConsoleConnector().listen();
+//------ Bot Connector - START ------//
+// Get secrets from server environment
+var connector = new builder.ChatConnector({
+    appId: process.env.MICROSOFT_APP_ID,
+    appPassword: process.env.MICROSOFT_APP_PASSWORD
+});
 var bot = new builder.UniversalBot(connector, {
     localizerSettings: {
         botLocalePath: "./node_modules/botbuilder/lib/locale",
@@ -43,15 +21,37 @@ var bot = new builder.UniversalBot(connector, {
 });
 // Setup Restify Server
 var server = restify.createServer();
+// Handle Bot Framework messages
+server.post('/api/messages', connector.listen());
 // Serve a static web page
 server.get(/.*/, restify.serveStatic({
     'directory': '.',
     'default': 'index.html'
 }));
-server.listen(process.env.port || process.env.PORT || 3978, process.env.IP || process.env.ip, function() {
+server.listen(process.env.port || process.env.PORT || 3978, function() {
     console.log('%s listening to %s', server.name, server.url);
 });
-//------ Console Connector - END ------//
+//------ Bot Connector - END ------//
+
+// //------ Console Connector - START ------//
+// var connector = new builder.ConsoleConnector().listen();
+// var bot = new builder.UniversalBot(connector, {
+//     localizerSettings: {
+//         botLocalePath: "./node_modules/botbuilder/lib/locale",
+//         defaultLocale: "en"
+//     }
+// });
+// // Setup Restify Server
+// var server = restify.createServer();
+// // Serve a static web page
+// server.get(/.*/, restify.serveStatic({
+//     'directory': '.',
+//     'default': 'index.html'
+// }));
+// server.listen(process.env.port || process.env.PORT || 3978, process.env.IP || process.env.ip, function() {
+//     console.log('%s listening to %s', server.name, server.url);
+// });
+// //------ Console Connector - END ------//
 
 var availableInsuranceTypes = ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"];
 var typeOfInsurance = "";
