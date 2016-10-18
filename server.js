@@ -26,22 +26,50 @@ server.listen(process.env.port|| process.env.PORT || 3978, function () {
     console.log('%s listening to %s', server.name, server.url); 
 });
 
+//Car insurance variables
 var carRegNo;
 var name;
 var carModel;
 var carCost;
 var carPDate;
 
+//Bike insurance variables
+var bikeRegNo;
+
+//Health insurance variables
+var noOfAdults;
+var noOfChild;
+var healthDOB;
+var healthCity;
+
+//Term insurance variables
+var Gender;
+var tobaccoUser;
+var termAnnualIncome;
+var termDOB;
+var termCity;
+
+//Investment plan variables
+var investAnnualIncome;
+var investDOB;
+var investCity;
+
+//Pension plan variables
+var pensionAnnualIncome;
+var pensionDOB;
+var pensionCity;
+
 // Create bot root dialog
 bot.dialog('/', [
    function (session) {
-    session.send("Welcome to Auto Insurance Bot !!!");
+    session.send("Let us get you covered with the best insurance policy !");
+    session.send("We help you compare Insurance Plans from 24+ Companies !!");
     builder.Prompts.text(session, ["May I have your name please","Hi! What is your name ?"]);
    },
     function (session, results) {
     if (results.response) {
         name = results.response;
-        session.send("Welcome %s...",name)
+        session.send("Welcome %s...",name);
         session.send("Please answer following few questions, so we can quickly get a quote that suits you!");
         session.beginDialog('/getModel');
         }
@@ -172,7 +200,7 @@ bot.dialog('/getClaim', [
     function (session, results) {
         if(results.response)
         {
-        session.send('Good you have not claimed till now.')
+        session.send('Good you have not claimed till now.');
         session.send('Find your details here \n\n Car Model: %s \n\n Cost of your Car: %s \n\n Car Reg No: %s \n\n You purchased car on: %d-%d-%d',carModel,carCost,carRegNo,carPDate.getDate(),carPDate.getMonth()+1,carPDate.getFullYear());
         }
         else {
