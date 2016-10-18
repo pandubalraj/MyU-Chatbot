@@ -8,17 +8,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pandubalraj/echobot.git"
+    "url": "git+https://github.com/vickylance/MyU-Autobot-Complete.git"
   },
   "keywords": [
     "botframework"
   ],
-  "author": "Pandu Balraj",
+  "author": "Vignesh S",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pandubalraj/echobot/issues"
+    "url": "https://github.com/vickylance/MyU-Autobot-Complete/issues"
   },
-  "homepage": "https://github.com/pandubalraj/echobot#readme",
+  "homepage": "https://github.com/vickylance/MyU-Autobot-Complete/#readme",
   "dependencies": {
     "botbuilder": "^3.3.0",
     "restify": "^4.1.1"
