@@ -1,24 +1,24 @@
 {
-  "name": "echobot",
+  "name": "myu-chatbot",
   "version": "1.0.0",
-  "description": "A sample bot for getting started with Bot Framework",
+  "description": "A bot which combines insurance and faq chats",
   "main": "server.js",
   "scripts": {
     "test": ""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vickylance/MyU-Autobot-Complete.git"
+    "url": "git+https://github.com/pandubalraj/MyU-Autobot.git"
   },
   "keywords": [
     "botframework"
   ],
-  "author": "Vignesh S",
+  "author": "Pandu",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vickylance/MyU-Autobot-Complete/issues"
+    "url": "https://github.com/pandubalraj/MyU-Autobot/issues"
   },
-  "homepage": "https://github.com/vickylance/MyU-Autobot-Complete/#readme",
+  "homepage": "https://github.com/pandubalraj/MyU-Autobot/#readme",
   "dependencies": {
     "botbuilder": "^3.3.0",
     "restify": "^4.1.1"
