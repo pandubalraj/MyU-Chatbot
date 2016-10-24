@@ -220,14 +220,14 @@ exports.createPrompts = function(bot) {
             if (isCarFirstTime[0]) {
                 builder.Prompts.choice(
                     session,
-                    'Is your Car CNG or LPG?', ["Don't have CNG/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
+                    'Is your Car CNG or LPG?', ["Don\'t have CNG/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
                     options
                 );
             }
             else {
                 builder.Prompts.choice(
                     session,
-                    'Please select if your car is fitted with CNG/LPG from the options given below.', ["Don't have CNG/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
+                    'Please select if your car is fitted with CNG/LPG from the options given below.', ["Don\'t have CNG/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
                     options
                 );
             }
