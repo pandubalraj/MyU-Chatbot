@@ -39,7 +39,7 @@ server.get(/.*/, restify.serveStatic({
     'default': 'index.html'
 }));
 
-server.listen(process.env.port || process.env.PORT || 3978, function() {
+server.listen(process.env.port || process.env.PORT || 3978, process.env.ip || process.env.IP, function() {
     console.log('%s listening to %s', server.name, server.url);
 });
 //#endregion Bot Connector
