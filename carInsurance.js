@@ -46,8 +46,11 @@ exports.createPrompts = function(bot) {
     ];
     var getCarRegNo = [
         function(session) {
+            var options = {
+                retryPrompt: "Wrong vehicle number.\nPlease enter your vehicle registration number exactly as shown in the example below?\n(eg: TN-05-AB-1234)"
+            };
             if (isCarFirstTime[0]) {
-                builder.Prompts.text(session, "Please enter your vehicle registration number? \n(eg: TN-05-AB-1234)");
+                builder.Prompts.text(session, "Please enter your vehicle registration number? \n(eg: TN-05-AB-1234)", options);
             }
             else {
                 builder.Prompts.text(session, "Wrong vehicle number.\nPlease enter your vehicle registration number exactly as shown in the example below?\n(eg: TN-05-AB-1234)");
@@ -56,9 +59,9 @@ exports.createPrompts = function(bot) {
         function(session, results) {
             isCarFirstTime[0] = false;
             if (results.response) {
-                if (isValidCarRegNo(results.response["entity"])) {
+                if (isValidCarRegNo(results.response)) {
                     isCarFirstTime[0] = true;
-                    carRegNo = results.response["entity"];
+                    carRegNo = results.response;
                     session.send("CarRegNo:" + carRegNo);
                 }
                 else {
@@ -82,9 +85,9 @@ exports.createPrompts = function(bot) {
         function(session, results) {
             isCarFirstTime[0] = false;
             if (results.response) {
-                if (isValidCarModel(results.response["entity"])) {
+                if (isValidCarModel(results.response)) {
                     isCarFirstTime[0] = true;
-                    carModel = results.response["entity"];
+                    carModel = results.response;
                     session.endDialog();
                     session.beginDialog('/carCity');
                 }
@@ -109,9 +112,9 @@ exports.createPrompts = function(bot) {
         function(session, results) {
             isCarFirstTime[0] = false;
             if (results.response) {
-                if (isValidCarCity(results.response["entity"])) {
+                if (isValidCarCity(results.response)) {
                     isCarFirstTime[0] = true;
-                    carRegCity = results.response["entity"];
+                    carRegCity = results.response;
                     session.endDialog();
                     session.beginDialog('/carYear');
                 }
