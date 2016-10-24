@@ -157,7 +157,7 @@ bot.dialog('/', [
     function(session) {
         //getting the name
         if (isFirstTime) {
-            session.send("Hi there,\nit's a pleasure meeting you.");
+            session.send("Hi there, it's a pleasure meeting you.");
             builder.Prompts.text(session, ["May I have your name please.", "Hi! What is your name?", "By the way i didn't get your name.", "May I know how you may be called?"]);
         }
         else {
@@ -199,7 +199,7 @@ bot.dialog('/', [
                     if (results.response.split(' ').length > 1) {
                         // isFirstTime = true;
                         name = results.response;
-                        session.send(["Welcome " + name + " it's a pleasure meeting you.", "Hi there,\nit's good to see you, " + name + "."]);
+                        session.send(["Welcome " + name + " it's a pleasure meeting you.", "Hi there, it's good to see you, " + name + "."]);
                         var options = {
                             retryPrompt: 'Please select with what I can help you today.',
                             listStyle: builder.ListStyle["button"]
@@ -262,7 +262,7 @@ bot.dialog('/insurance', [
             listStyle: builder.ListStyle["button"]
         };
         if (isFirstTime) {
-            session.send("Great!!!\nLet us get you covered with the best insurance policy !\nWe will help you compare Insurance Plans from 24+ Companies !!");
+            session.send("Great!!! Let us get you covered with the best insurance policy ! We will help you compare Insurance Plans from 24+ Companies !!");
             builder.Prompts.choice(
                 session,
                 'But before that please let me know what type of plan you are looking for?', ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"],
