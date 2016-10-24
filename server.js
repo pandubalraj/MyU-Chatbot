@@ -92,6 +92,7 @@ var availableInsuranceTypes = ["Car", "Bike", "Health", "Term", "Child", "Invest
 var typeOfInsurance = "";
 var name;
 
+//Initialize all the prompts in Car
 car.createPrompts(bot);
 
 // Use the below dialog as a testing workbench
@@ -165,6 +166,13 @@ dialog.matches('DiffAggregator', builder.DialogAction.send(sourceFile.DiffAggreg
 dialog.matches('MyUniverse', builder.DialogAction.send(sourceFile.MyUniverse));
 dialog.matches('MyUniverseTypes', builder.DialogAction.send(sourceFile.MyUniverseTypes));
 dialog.matches('EasyPolicy', builder.DialogAction.send(sourceFile.EasyPolicy));
+
+//Changing to Insurance bot
+dialog.matches('Exit', function(session) {
+    session.send("Ok, let me redirect you to our Insurance Expert.");
+    session.endDialog();
+    session.beginDialog('/insurance');
+});
 //#endregion FAQ Dialogues
 
 
@@ -319,11 +327,9 @@ bot.dialog('/insurance', [
         if (results.response) {
             if (availableInsuranceTypes.indexOf(results.response["entity"]) > -1) {
                 typeOfInsurance = results.response["entity"];
-                session.send("We are glad to help you get a " + typeOfInsurance + ((results.response["index"] < 5) ? " Insurance." : " Policy.") + "\nPlease hold on " + name + " while we connect you to " + generateRandomName() + " who is our " + typeOfInsurance + ((results.response["index"] < 5) ? " Insurance." : " Policy.") + " Expert.");
-                session.send("Please answer following few questions, so we can quickly get a quote that suits you!");
+                session.send("We are glad to help you get a " + typeOfInsurance + ((results.response["index"] < 5) ? " Insurance." : " Policy.") + "\nPlease hold on " + name + " while we connect you to " + generateRandomName() + " who is our " + typeOfInsurance + ((results.response["index"] < 5) ? " Insurance." : " Policy.") + " Expert.\nPlease answer following few questions, so we can quickly get a quote that suits you!");
                 if (typeOfInsurance == "Car") {
-                    // session.beginDialog('/carInsurance');
-                    session.send("car insurance queries");
+                    car.beginCarInsurance(session);
                 }
                 else if (typeOfInsurance == "Bike") {
                     // session.beginDialog('/bikeInsurance');
@@ -425,73 +431,6 @@ function generateRandomName() {
     return randomName;
 }
 
-// bot.dialog('/getModel', [
-//     function (session) {
-//         builder.Prompts.confirm(session,'Are you fan of German car manufacturer?');
-//     },
-//     function (session, results) {
-//         if (results.response) {
-//             session.beginDialog('/ChooseGerman');
-//         }
-//         else {
-//             session.beginDialog('/getJapan');
-//         }
-//     }
-// ]);
-
-// bot.dialog('/ChooseGerman',[
-//     function (session) {
-//         builder.Prompts.choice(session, 'Then you might own any of these car',["Audi","BWM","Mercedes"]);
-//     },
-//     function(session,results){
-//         if (results.response){
-//             carModel = results.response["entity"];
-//             session.beginDialog('/getPDate');
-//         }
-//     }
-// ]);
-
-// bot.dialog('/getJapan',[
-//     function(session) {
-//         builder.Prompts.confirm(session,"Then you might be Japanese Manufacturer fan");
-//     },
-//     function(session,results) {
-//         if(results.response){
-//             session.beginDialog('/JapanChoose');
-//         }
-//         else {
-//         session.beginDialog('/OtherCar');
-//         }
-//     }
-// ]);
-
-// bot.dialog('/JapanChoose',[
-//     function(session) {
-//         builder.Prompts.choice(session, 'I hope You might own any of these',["Honda","Toyota","Suzuki"]);
-//     },
-//     function(session,results) {
-//         if (session.results)
-//         {
-//             carModel = results.response["entity"];
-//             session.beginDialog('/getPDate');
-//         }
-//         else
-//         {
-//             session.beginDialog('/OtherCar');
-//         }
-//     }
-// ]);
-
-// bot.dialog('/OtherCar', [
-//     function(session){
-//         builder.Prompts.text(session, 'Who is the Manufacturer of your car...');
-//     },
-//     function(session,results){
-//         carModel = results.response["entity"];
-//         session.beginDialog('/getPDate');
-//     }
-// ]);
-
 // bot.dialog('/getPDate', [
 //     function (session) {
 //     builder.Prompts.time(session, "When did you purchase your car? Please enter your date format as DD-MM-YYYY");
@@ -537,22 +476,6 @@ function generateRandomName() {
 //         if (results.response) {
 //             carRegNo = results.response;
 //             session.beginDialog('/getClaim');
-//         }
-//     }
-// ]);
-
-// bot.dialog('/getClaim', [
-//     function (session) {
-//         builder.Prompts.confirm(session,"We hope you didn't do any claim this year");
-//     },
-//     function (session, results) {
-//         if(results.response)
-//         {
-//         session.send('Good you have not claimed till now.');
-//         session.send('Find your details here \n\n Car Model: %s \n\n Cost of your Car: %s \n\n Car Reg No: %s \n\n You purchased car on: %d-%d-%d',carModel,carCost,carRegNo,carPDate.getDate(),carPDate.getMonth()+1,carPDate.getFullYear());
-//         }
-//         else {
-//         session.send('Find your details here \n\n Car Model: %s \n\n Cost of your Car: %s \n\n Car Reg No: %s \n\n You purchased car on: %d-%d-%d',carModel,carCost,carRegNo,carPDate.getDate(),carPDate.getMonth()+1,carPDate.getFullYear());
 //         }
 //     }
 // ]);
