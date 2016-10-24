@@ -197,7 +197,7 @@ bot.dialog('/', [
                 if (isNaN(results.response) && isValid(results.response)) {
                     //Lets check if it is a full name
                     if (results.response.split(' ').length > 1) {
-                        // isFirstTime = true;
+                        isFirstTime = true;
                         name = results.response;
                         session.send(["Welcome " + name + " it's a pleasure meeting you.", "Hi there, it's good to see you, " + name + "."]);
                         var options = {
