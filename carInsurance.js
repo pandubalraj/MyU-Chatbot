@@ -199,8 +199,8 @@ exports.createPrompts = function(bot) {
                     else {
                         isInsured = true;
                     }
-                    session.beginDialog('/carCngLpg');
                     session.endDialog();
+                    session.beginDialog('/carCngLpg');
                 }
                 else {
                     session.beginDialog('/carLastClaim');
@@ -214,20 +214,20 @@ exports.createPrompts = function(bot) {
     var getCarCngLpg = [
         function(session) {
             var options = {
-                retryPrompt: 'Please select if your car is fitted with CNG/LPG from the options given below.',
+                retryPrompt: 'Please select if your car is fitted with CNG\/LPG from the options given below.',
                 listStyle: builder.ListStyle["button"]
             };
             if (isCarFirstTime[0]) {
                 builder.Prompts.choice(
                     session,
-                    'Is your Car CNG or LPG?', ["Don\'t have CNG/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
+                    'Is your Car CNG or LPG?', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
                     options
                 );
             }
             else {
                 builder.Prompts.choice(
                     session,
-                    'Please select if your car is fitted with CNG/LPG from the options given below.', ["Don\'t have CNG/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
+                    'Please select if your car is fitted with CNG\/LPG from the options given below.', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
                     options
                 );
             }
@@ -241,7 +241,7 @@ exports.createPrompts = function(bot) {
                     if (carRegNo == "") {
                         session.send("CarModel:%s,CarCity:%s,CarYear:%s,CarLastClaim:%s,IsInsured:%s,CarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
                     }
-                    session.endDialog();
+                    // session.endDialog();
                 }
                 else {
                     session.beginDialog('/carCngLpg');
