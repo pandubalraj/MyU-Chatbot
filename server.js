@@ -21,46 +21,46 @@ var dialog = new builder.IntentDialog({
     recognizers: [insuranceRecognizer, faqRecognizerApp1, faqRecognizerApp2, faqRecognizerApp3]
 });
 
-//#region Bot Connector
-var connector = new builder.ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
-});
-var bot = new builder.UniversalBot(connector, {
-    localizerSettings: {
-        botLocalePath: "./node_modules/botbuilder/lib/locale",
-        defaultLocale: "en"
-    }
-});
-var server = restify.createServer();
-server.post('/api/messages', connector.listen());
-server.get(/.*/, restify.serveStatic({
-    'directory': '.',
-    'default': 'index.html'
-}));
-
-server.listen(process.env.port || process.env.PORT || 3978, process.env.ip || process.env.IP, function() {
-    console.log('%s listening to %s', server.name, server.url);
-});
-//#endregion Bot Connector
-
-// //#region Console Connector
-// var connector = new builder.ConsoleConnector().listen();
+// //#region Bot Connector
+// var connector = new builder.ChatConnector({
+//     appId: process.env.MICROSOFT_APP_ID,
+//     appPassword: process.env.MICROSOFT_APP_PASSWORD
+// });
 // var bot = new builder.UniversalBot(connector, {
 //     localizerSettings: {
 //         botLocalePath: "./node_modules/botbuilder/lib/locale",
 //         defaultLocale: "en"
 //     }
 // });
-// var server = restify.createServer(); // Setup Restify Server
-// server.get(/.*/, restify.serveStatic({ // Serve a static web page
+// var server = restify.createServer();
+// server.post('/api/messages', connector.listen());
+// server.get(/.*/, restify.serveStatic({
 //     'directory': '.',
 //     'default': 'index.html'
 // }));
-// server.listen(process.env.port || process.env.PORT || 3978, process.env.IP || process.env.ip, function() {
+
+// server.listen(process.env.port || process.env.PORT || 3978, process.env.ip || process.env.IP, function() {
 //     console.log('%s listening to %s', server.name, server.url);
 // });
-// //#endregion Console Connector
+// //#endregion Bot Connector
+
+//#region Console Connector
+var connector = new builder.ConsoleConnector().listen();
+var bot = new builder.UniversalBot(connector, {
+    localizerSettings: {
+        botLocalePath: "./node_modules/botbuilder/lib/locale",
+        defaultLocale: "en"
+    }
+});
+var server = restify.createServer(); // Setup Restify Server
+server.get(/.*/, restify.serveStatic({ // Serve a static web page
+    'directory': '.',
+    'default': 'index.html'
+}));
+server.listen(process.env.port || process.env.PORT || 3978, process.env.IP || process.env.ip, function() {
+    console.log('%s listening to %s', server.name, server.url);
+});
+//#endregion Console Connector
 
 var availableInsuranceTypes = ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"];
 var typeOfInsurance = "";
@@ -68,6 +68,8 @@ var name;
 
 //Initialize all the prompts in Car
 car.createPrompts(bot);
+
+bike.createPrompts(bot);
 
 // Use the below dialog as a testing workbench
 // bot.dialog('/',[
@@ -144,9 +146,32 @@ dialog.matches('EasyPolicy', builder.DialogAction.send(sourceFile.EasyPolicy));
 //Changing to Insurance bot
 dialog.matches('Exit', function(session) {
     session.send("Ok, let me redirect you to our Insurance Expert.");
+    session.sendBatch();
     session.endDialog();
     session.beginDialog('/insurance');
 });
+
+//Using Entities on the Intent "Claim"
+// dialog.matches('Claim',[
+//     function (session, args, next) {
+//         var task = builder.EntityRecognizer.findEntity(args.entities, 'TaskTitle');
+//         if (!task) {
+//             builder.Prompts.text(session, "What would you like to call the task?");
+//         } 
+//         else {
+//             next({ response: task.entity });
+//         }
+//     },
+//     function (session, results) {
+//         if (results.response) {
+//             session.send("Ok... Added the '%s' task.", results.response);
+//         } 
+//         else {
+//             session.send("Ok");
+//         }
+//     }
+// ]);
+
 //#endregion FAQ Dialogues
 
 
@@ -157,7 +182,7 @@ bot.dialog('/', [
     function(session) {
         //getting the name
         if (isFirstTime) {
-            session.send("Hi there, it's a pleasure meeting you.");
+            session.send("Hi there,\nit's a pleasure meeting you.");
             builder.Prompts.text(session, ["May I have your name please.", "Hi! What is your name?", "By the way i didn't get your name.", "May I know how you may be called?"]);
         }
         else {
@@ -172,13 +197,6 @@ bot.dialog('/', [
                 case 3:
                     builder.Prompts.text(session, "Please enter your name.");
                     break;
-                    // the below cases 4,5 are for wrong option selection
-                case 4:
-                    builder.Prompts.text(session, "No option found. Please select the appropriate Option.");
-                    break;
-                case 5:
-                    builder.Prompts.text(session, "Please select an Option.");
-                    break;
                 default:
                     builder.Prompts.text(session, "Please enter a valid name.");
             }
@@ -187,68 +205,77 @@ bot.dialog('/', [
     function(session, results, next) {
         //setting the name and asking how to help
         isFirstTime = false;
-        //redirect to next question if the name already retrieved from the user
-        if (cases >= 4) {
-            next();
-        }
-        else {
-            if (results.response) {
-                //This will run for a valid string
-                if (isNaN(results.response) && isValid(results.response)) {
-                    //Lets check if it is a full name
-                    if (results.response.split(' ').length > 1) {
-                        isFirstTime = true;
-                        name = results.response;
-                        session.send(["Welcome " + name + " it's a pleasure meeting you.", "Hi there, it's good to see you, " + name + "."]);
-                        var options = {
-                            retryPrompt: 'Please select with what I can help you today.',
-                            listStyle: builder.ListStyle["button"]
-                        };
-                        builder.Prompts.choice(
-                            session,
-                            'Please let me know what what I may help you with, today?', ["I have a question!", "I am looking for an insurance"],
-                            options
-                        );
-                    }
-                    else {
-                        cases = 1;
-                        session.beginDialog('/');
-                    }
+        if (results.response) {
+            //This will run for a valid string
+            if (isNaN(results.response) && isValid(results.response)) {
+                //Lets check if it is a full name
+                if (results.response.split(' ').length > 1) {
+                    isFirstTime = true;
+                    name = results.response;
+                    session.send(["Welcome " + name + " it's a pleasure meeting you.", "Hi there,\nit's good to see you, " + name + "."]);
+                    session.endDialog();
+                    session.beginDialog('/helpQuery');
+
                 }
                 else {
-                    cases = 2;
+                    cases = 1;
                     session.beginDialog('/');
                 }
             }
             else {
-                cases = 3;
+                cases = 2;
                 session.beginDialog('/');
             }
         }
+        else {
+            cases = 3;
+            session.beginDialog('/');
+        }
+    }
+]);
+
+bot.dialog('/helpQuery', [
+    function(session) {
+        var options = {
+            retryPrompt: 'Please select with what I can help you today.',
+            listStyle: builder.ListStyle["button"]
+        };
+        if (isFirstTime) {
+            builder.Prompts.choice(
+                session,
+                'Please let me know what what I may help you with, today?', ["I have a question!", "I am looking for an insurance"],
+                options
+            );
+        }
+        else {
+            builder.Prompts.choice(
+                session,
+                'Please select the appropriate option?', ["I have a question!", "I am looking for an insurance"],
+                options
+            );
+        }
     },
     function(session, results) {
-        //redirecting depending upon the help required by the user
+        isFirstTime = false;
         if (results.response) {
             if (results.response["index"] == 0) {
+                isFirstTime = true;
                 session.send("Sure, please hold on " + name + " while we connect you to our Techncial Advisor.");
                 session.send("Thank you for your patience. You are now talking with " + generateRandomName() + ". You can ask your queries now.");
                 session.endDialog();
                 session.beginDialog('/faqs');
             }
             else if (results.response["index"] == 1) {
-                session.endDialog();
                 isFirstTime = true;
-                cases = 0;
+                session.endDialog();
                 session.beginDialog('/insurance');
             }
             else {
-                cases = 4;
-                session.beginDialog('/');
+                session.beginDialog('/helpQuery');
             }
         }
         else {
-            cases = 5;
-            session.beginDialog('/');
+            session.beginDialog('/helpQuery');
         }
     }
 ]);
@@ -262,7 +289,7 @@ bot.dialog('/insurance', [
             listStyle: builder.ListStyle["button"]
         };
         if (isFirstTime) {
-            session.send("Great!!! Let us get you covered with the best insurance policy ! We will help you compare Insurance Plans from 24+ Companies !!");
+            session.send("Great!!!\nLet us get you covered with the best insurance policy !\nWe will help you compare Insurance Plans from 24+ Companies !!");
             builder.Prompts.choice(
                 session,
                 'But before that please let me know what type of plan you are looking for?', ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"],
@@ -270,29 +297,11 @@ bot.dialog('/insurance', [
             );
         }
         else {
-            switch (cases) {
-                //the below cases 1,2 are for wrong policy option
-                case 1:
-                    builder.Prompts.choice(
-                        session,
-                        'Please choose from the below list.', ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"],
-                        options
-                    );
-                    break;
-                case 2:
-                    builder.Prompts.choice(
-                        session,
-                        'Please choose from the below list.', ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"],
-                        options
-                    );
-                    break;
-                default:
-                    builder.Prompts.choice(
-                        session,
-                        'Please choose from the below list.', ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"],
-                        options
-                    );
-            }
+            builder.Prompts.choice(
+                session,
+                'Please choose from the below list.', ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"],
+                options
+            );
         }
     },
     function(session, results) {
@@ -306,8 +315,7 @@ bot.dialog('/insurance', [
                     car.beginCarInsurance(session);
                 }
                 else if (typeOfInsurance == "Bike") {
-                    // session.beginDialog('/bikeInsurance');
-                    session.send("bike insurance queries");
+                    bike.beginBikeInsurance(session);
                 }
                 else if (typeOfInsurance == "Health") {
                     // session.beginDialog('/healthInsurance');
@@ -331,12 +339,10 @@ bot.dialog('/insurance', [
                 }
             }
             else {
-                cases = 1;
                 session.beginDialog('/insurance');
             }
         }
         else {
-            cases = 2;
             session.beginDialog('/insurance');
         }
     }
@@ -453,3 +459,19 @@ function generateRandomName() {
 //         }
 //     }
 // ]);
+
+exports.beginRootDialog = function(session, options) {
+    session.beginDialog('/', options || {});
+};
+
+exports.beginHelpQuery = function(session, options) {
+    session.beginDialog('/helpQuery', options || {});
+};
+
+exports.beginInsurance = function(session, options) {
+    session.beginDialog('/insurance', options || {});
+};
+
+exports.beginFaqs = function(session, options) {
+    session.beginDialog('/faqs', options || {});
+};
