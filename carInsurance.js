@@ -1,4 +1,5 @@
 var builder = require('botbuilder');
+var main = require("./server");
 
 var isCarFirstTime = [];
 
@@ -63,6 +64,8 @@ exports.createPrompts = function(bot) {
                     isCarFirstTime[0] = true;
                     carRegNo = results.response;
                     session.send("CarRegNo:" + carRegNo);
+                    session.endDialog();
+                    main.beginHelpQuery(session);
                 }
                 else {
                     session.beginDialog('/carRegNo');
@@ -238,11 +241,10 @@ exports.createPrompts = function(bot) {
                 if (isValidCarCngLpg(results.response["entity"])) {
                     isCarFirstTime[0] = true;
                     carCngLpg = results.response["entity"];
-                    if (carRegNo == "") {
-                        session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nIsInsured:%s,\nCarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
-                        session.endDialog();
-                        session.beginDialog('/');
-                    }
+                    session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nIsInsured:%s,\nCarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
+                    session.sendBatch();
+                    session.endDialog();
+                    main.beginHelpQuery(session);
                 }
                 else {
                     session.beginDialog('/carCngLpg');
