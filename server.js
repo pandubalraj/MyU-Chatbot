@@ -42,25 +42,7 @@ server.get(/.*/, restify.serveStatic({
 server.listen(process.env.port || process.env.PORT || 3978, process.env.ip || process.env.IP, function() {
     console.log('%s listening to %s', server.name, server.url);
 });
-//#endregion Bot Connector
 
-// //#region Console Connector
-// var connector = new builder.ConsoleConnector().listen();
-// var bot = new builder.UniversalBot(connector, {
-//     localizerSettings: {
-//         botLocalePath: "./node_modules/botbuilder/lib/locale",
-//         defaultLocale: "en"
-//     }
-// });
-// var server = restify.createServer(); // Setup Restify Server
-// server.get(/.*/, restify.serveStatic({ // Serve a static web page
-//     'directory': '.',
-//     'default': 'index.html'
-// }));
-// server.listen(process.env.port || process.env.PORT || 3978, process.env.IP || process.env.ip, function() {
-//     console.log('%s listening to %s', server.name, server.url);
-// });
-// //#endregion Console Connector
 
 var availableInsuranceTypes = ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"];
 var typeOfInsurance = "";
@@ -68,7 +50,6 @@ var name;
 
 //Initialize all the prompts in Car
 car.createPrompts(bot);
-
 bike.createPrompts(bot);
 
 // Use the below dialog as a testing workbench
