@@ -239,9 +239,10 @@ exports.createPrompts = function(bot) {
                     isCarFirstTime[0] = true;
                     carCngLpg = results.response["entity"];
                     if (carRegNo == "") {
-                        session.send("CarModel:%s,CarCity:%s,CarYear:%s,CarLastClaim:%s,IsInsured:%s,CarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
+                        session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nIsInsured:%s,\nCarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
+                        session.endDialog();
+                        session.beginDialog('/');
                     }
-                    // session.endDialog();
                 }
                 else {
                     session.beginDialog('/carCngLpg');
