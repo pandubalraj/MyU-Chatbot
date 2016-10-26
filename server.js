@@ -224,14 +224,14 @@ bot.dialog('/helpQuery', [
         if (isFirstTime) {
             builder.Prompts.choice(
                 session,
-                'Please let me know what what I may help you with, today?', ["I have a question!", "I am looking for an insurance"],
+                'Please let me know what what I may help you with, today?', ["Do you have question", "Are you looking for an insurance"],
                 options
             );
         }
         else {
             builder.Prompts.choice(
                 session,
-                'Please select the appropriate option?', ["I have a question!", "I am looking for an insurance"],
+                'Please select the appropriate option?', ["Do you have question", "Are you looking for an insurance"],
                 options
             );
         }
