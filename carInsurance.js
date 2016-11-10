@@ -5,39 +5,45 @@ var isCarFirstTime = [];
 
 //Car insurance variables
 var carRegNo = "";
+var carMake;
 var carModel;
 var carRegCity;
 var carRegYear;
 var carLastTakenClaim;
 var carCngLpg;
 var isInsured;
+var carCost;
+
 
 exports.createPrompts = function(bot) {
     isCarFirstTime[0] = true;
     //Prompts
     var askCarRegNo = [
         function(session) {
-            session.send("We are glad to help you get a Car Insurance." + "\nPlease hold on while we connect you to our Insurance Expert.\n Please answer following few questions, so we can quickly get a quote that suits you!");
+            session.send("We are glad to help you get a Car Insurance. \n Please hold on while we connect you to our Insurance Expert. \n Please answer following few questions, so we can quickly get a quote that suits you!");
+
             var options = {
                 retryPrompt: "Please confirm if you know your car registration number or not?",
                 listStyle: builder.ListStyle["button"]
             };
-            if (isCarFirstTime[0]) {
-                builder.Prompts.confirm(session, "Do you remember your Car registration number?", options);
-            }
-            else {
-                builder.Prompts.confirm(session, "Please confirm if you know your car registration number or not?", options);
-            }
+            
+            builder.Prompts.confirm(session, "Do you remember your Car registration number?", options);
+            // if (isCarFirstTime[0]) {
+            //     builder.Prompts.confirm(session, "Do you remember your Car registration number?", options);
+            // }
+            // else {
+            //     builder.Prompts.confirm(session, "Please confirm if you know your car registration number or not?", options);
+            // }
         },
         function(session, results) {
-            isCarFirstTime[0] = false;
+            // isCarFirstTime[0] = false;
             if (results.response) {
-                isCarFirstTime[0] = true;
+                // isCarFirstTime[0] = true;
                 session.endDialog();
-                session.beginDialog('/carModel');
+                session.beginDialog('/carRegNo');
             }
             else if (!results.response) {
-                isCarFirstTime[0] = true;
+                // isCarFirstTime[0] = true;
                 session.endDialog();
                 session.beginDialog('/carModel');
             }
@@ -64,9 +70,9 @@ exports.createPrompts = function(bot) {
                 if (isValidCarRegNo(results.response)) {
                     isCarFirstTime[0] = true;
                     carRegNo = results.response;
-                    session.send("CarRegNo:" + carRegNo);
+                    // session.send("CarRegNo:" + carRegNo);
                     session.endDialog();
-                    main.beginHelpQuery(session);
+                    session.beginDialog('/carMake');
                 }
                 else {
                     session.beginDialog('/carRegNo');
@@ -77,10 +83,27 @@ exports.createPrompts = function(bot) {
             }
         }
     ];
+    
+    var getCarMake = [
+        function(session) {
+            builder.Prompts.text(session, "Which car do you drive?");
+        },
+        function(session, results) {
+            if (results.response) {
+                carMake = results.response;
+                session.endDialog();
+                session.beginDialog('/carModel');
+            }
+            else {
+                session.beginDialog('/carMake');
+            }
+        }
+    ];
+    
     var getCarModel = [
         function(session) {
             if (isCarFirstTime[0]) {
-                builder.Prompts.text(session, "Which Car do you drive?");
+                builder.Prompts.text(session, "What is the model of your "+carMake+"?" );
             }
             else {
                 builder.Prompts.text(session, "The car model is not in our directory. Please make sure you have entered the correct Car model.");
@@ -170,6 +193,23 @@ exports.createPrompts = function(bot) {
             }
         }
     ];
+    
+       var getCarCost = [
+        function(session) {
+            builder.Prompts.number(session, "How much did you spend on your car?");
+        },
+        function(session, results) {
+            if (results.response) {
+                carCost = results.response;
+                session.endDialog();
+                session.beginDialog('/carLastClaim');
+            }
+            else {
+                session.beginDialog('/carCost');
+            }
+        }
+    ];
+    
     var getCarLastClaim = [
         function(session) {
             var options = {
@@ -242,7 +282,7 @@ exports.createPrompts = function(bot) {
                 if (isValidCarCngLpg(results.response["entity"])) {
                     isCarFirstTime[0] = true;
                     carCngLpg = results.response["entity"];
-                    session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nIsInsured:%s,\nCarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
+                    session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
                     session.sendBatch();
                     session.endDialog();
                     // main.beginHelpQuery(session);
@@ -259,9 +299,11 @@ exports.createPrompts = function(bot) {
 
     bot.dialog('/carInsurance', askCarRegNo);
     bot.dialog('/carRegNo', getCarRegNo);
+    bot.dialog('/carMake', getCarMake);
     bot.dialog('/carModel', getCarModel);
     bot.dialog('/carCity', getCarCity);
     bot.dialog('/carYear', getCarYear);
+    bot.dialog('/carCost', getCarCost);
     bot.dialog('/carLastClaim', getCarLastClaim);
     bot.dialog('/carCngLpg', getCarCngLpg);
 };
