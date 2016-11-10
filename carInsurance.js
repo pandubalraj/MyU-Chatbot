@@ -182,7 +182,7 @@ exports.createPrompts = function(bot) {
                     isCarFirstTime[0] = true;
                     carRegYear = results.response["entity"];
                     session.endDialog();
-                    session.beginDialog('/carLastClaim');
+                    session.beginDialog('/carCost');
                 }
                 else {
                     session.beginDialog('/carYear');
@@ -282,7 +282,7 @@ exports.createPrompts = function(bot) {
                 if (isValidCarCngLpg(results.response["entity"])) {
                     isCarFirstTime[0] = true;
                     carCngLpg = results.response["entity"];
-                    session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
+                    session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCost);
                     session.sendBatch();
                     session.endDialog();
                     // main.beginHelpQuery(session);
