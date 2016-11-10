@@ -17,6 +17,7 @@ exports.createPrompts = function(bot) {
     //Prompts
     var askCarRegNo = [
         function(session) {
+            session.send("We are glad to help you get a Car Insurance." + "\nPlease hold on while we connect you to our Insurance Expert.\n Please answer following few questions, so we can quickly get a quote that suits you!");
             var options = {
                 retryPrompt: "Please confirm if you know your car registration number or not?",
                 listStyle: builder.ListStyle["button"]
@@ -33,7 +34,7 @@ exports.createPrompts = function(bot) {
             if (results.response) {
                 isCarFirstTime[0] = true;
                 session.endDialog();
-                session.beginDialog('/carRegNo');
+                session.beginDialog('/carModel');
             }
             else if (!results.response) {
                 isCarFirstTime[0] = true;
@@ -244,7 +245,7 @@ exports.createPrompts = function(bot) {
                     session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nIsInsured:%s,\nCarCngLpg:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCngLpg);
                     session.sendBatch();
                     session.endDialog();
-                    main.beginHelpQuery(session);
+                    // main.beginHelpQuery(session);
                 }
                 else {
                     session.beginDialog('/carCngLpg');

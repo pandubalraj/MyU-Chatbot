@@ -43,6 +43,25 @@ server.listen(process.env.port || process.env.PORT || 3978, process.env.ip || pr
     console.log('%s listening to %s', server.name, server.url);
 });
 
+//#endregion Bot Connector
+ 
+//   //#region Console Connector
+//   var connector = new builder.ConsoleConnector().listen();
+//   var bot = new builder.UniversalBot(connector, {
+//       localizerSettings: {
+//           botLocalePath: "./node_modules/botbuilder/lib/locale",
+//           defaultLocale: "en"
+//       }
+//   });
+//   var server = restify.createServer(); // Setup Restify Server
+//   server.get(/.*/, restify.serveStatic({ // Serve a static web page
+//       'directory': '.',
+//       'default': 'index.html'
+//   }));
+//   server.listen(process.env.port || process.env.PORT || 3978, process.env.IP || process.env.ip, function() {
+//       console.log('%s listening to %s', server.name, server.url);
+//   });
+//   //#endregion Console Connector
 
 var availableInsuranceTypes = ["Car", "Bike", "Health", "Term", "Child", "Investment", "Pension"];
 var typeOfInsurance = "";
@@ -249,7 +268,8 @@ bot.dialog('/helpQuery', [
             else if (results.response["index"] == 1) {
                 isFirstTime = true;
                 session.endDialog();
-                session.beginDialog('/insurance');
+                car.beginCarInsurance(session);
+                // session.beginDialog('/insurance');
             }
             else {
                 session.beginDialog('/helpQuery');
