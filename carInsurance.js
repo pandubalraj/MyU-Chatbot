@@ -75,7 +75,7 @@ exports.createPrompts = function(bot) {
                     session.beginDialog('/carMake');
                 }
                 else {
-                    session.beginDialog('/carRegNo');
+                    session.beginDialog('/carMake');
                 }
             }
             else {
