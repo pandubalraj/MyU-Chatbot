@@ -20,8 +20,7 @@ exports.createPrompts = function(bot) {
     //Prompts
     var askCarRegNo = [
         function(session) {
-            session.send("We are glad to help you get a Car Insurance. \n Please hold on while we connect you to our Insurance Expert. \n Please answer following few questions, so we can quickly get a quote that suits you!");
-
+            session.send("We are glad to help you get a Car Insurance. <br> Please hold on while we connect you to our Insurance Expert. <br> Please answer following few questions, so we can quickly get a quote that suits you!");
             var options = {
                 retryPrompt: "Please confirm if you know your car registration number or not?",
                 listStyle: builder.ListStyle["button"]
@@ -45,7 +44,7 @@ exports.createPrompts = function(bot) {
             else if (!results.response) {
                 // isCarFirstTime[0] = true;
                 session.endDialog();
-                session.beginDialog('/carModel');
+                session.beginDialog('/carMake');
             }
             else {
                 session.beginDialog('/carInsurance');
@@ -57,25 +56,25 @@ exports.createPrompts = function(bot) {
             var options = {
                 retryPrompt: "Wrong vehicle number.\nPlease enter your vehicle registration number exactly as shown in the example below?\n(eg: TN-05-AB-1234)"
             };
-            if (isCarFirstTime[0]) {
+            // if (isCarFirstTime[0]) {
                 builder.Prompts.text(session, "Please enter your vehicle registration number? \n(eg: TN-05-AB-1234)", options);
-            }
-            else {
-                builder.Prompts.text(session, "Wrong vehicle number.\nPlease enter your vehicle registration number exactly as shown in the example below?\n(eg: TN-05-AB-1234)");
-            }
+            // }
+            // else {
+            //     builder.Prompts.text(session, "Wrong vehicle number.\nPlease enter your vehicle registration number exactly as shown in the example below?\n(eg: TN-05-AB-1234)");
+            // }
         },
         function(session, results) {
-            isCarFirstTime[0] = false;
+            // isCarFirstTime[0] = false;
             if (results.response) {
                 if (isValidCarRegNo(results.response)) {
-                    isCarFirstTime[0] = true;
+                    // isCarFirstTime[0] = true;
                     carRegNo = results.response;
                     // session.send("CarRegNo:" + carRegNo);
                     session.endDialog();
                     session.beginDialog('/carMake');
                 }
                 else {
-                    session.beginDialog('/carMake');
+                    session.beginDialog('/carRegNo');
                 }
             }
             else {
@@ -160,26 +159,26 @@ exports.createPrompts = function(bot) {
                 retryPrompt: 'Please select the correct year your car was registered in from the options given.',
                 listStyle: builder.ListStyle["button"]
             };
-            if (isCarFirstTime[0]) {
+            // if (isCarFirstTime[0]) {
                 builder.Prompts.choice(
                     session,
                     'Your car is registered in which year? ', ["2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"],
                     options
                 );
-            }
-            else {
-                builder.Prompts.choice(
-                    session,
-                    'Please select the correct year your car was registered in from the options given.', ["2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"],
-                    options
-                );
-            }
+            // }
+            // else {
+            //     builder.Prompts.choice(
+            //         session,
+            //         'Please select the correct year your car was registered in from the options given.', ["2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015"],
+            //         options
+            //     );
+            // }
         },
         function(session, results) {
-            isCarFirstTime[0] = false;
+            // isCarFirstTime[0] = false;
             if (results.response) {
                 if (isValidCarYear(results.response["entity"])) {
-                    isCarFirstTime[0] = true;
+                    // isCarFirstTime[0] = true;
                     carRegYear = results.response["entity"];
                     session.endDialog();
                     session.beginDialog('/carCost');
@@ -216,26 +215,26 @@ exports.createPrompts = function(bot) {
                 retryPrompt: 'Please select the correct year you made your last claim from the options given below.',
                 listStyle: builder.ListStyle["button"]
             };
-            if (isCarFirstTime[0]) {
+            // if (isCarFirstTime[0]) {
                 builder.Prompts.choice(
                     session,
                     'When you have taken your last claim?', ["Never", "Less than 1 year ago", "October 2014 to September 2015", "October 2013 to September 2014", "October 2012 to September 2013", "October 2011 to September 2012"],
                     options
                 );
-            }
-            else {
-                builder.Prompts.choice(
-                    session,
-                    'Please select the correct year you made your last claim from the options given below.', ["Never", "Less than 1 year ago", "October 2014 to September 2015", "October 2013 to September 2014", "October 2012 to September 2013", "October 2011 to September 2012"],
-                    options
-                );
-            }
+            // }
+            // else {
+            //     builder.Prompts.choice(
+            //         session,
+            //         'Please select the correct year you made your last claim from the options given below.', ["Never", "Less than 1 year ago", "October 2014 to September 2015", "October 2013 to September 2014", "October 2012 to September 2013", "October 2011 to September 2012"],
+            //         options
+            //     );
+            // }
         },
         function(session, results) {
-            isCarFirstTime[0] = false;
+            // isCarFirstTime[0] = false;
             if (results.response) {
                 if (isValidCarLastClaim(results.response["entity"])) {
-                    isCarFirstTime[0] = true;
+                    // isCarFirstTime[0] = true;
                     carLastTakenClaim = results.response["entity"];
                     if (carLastTakenClaim == "Never") {
                         isInsured = false;
@@ -261,26 +260,26 @@ exports.createPrompts = function(bot) {
                 retryPrompt: 'Please select if your car is fitted with CNG\/LPG from the options given below.',
                 listStyle: builder.ListStyle["button"]
             };
-            if (isCarFirstTime[0]) {
+            // if (isCarFirstTime[0]) {
                 builder.Prompts.choice(
                     session,
                     'Is your Car CNG or LPG?', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
                     options
                 );
-            }
-            else {
-                builder.Prompts.choice(
-                    session,
-                    'Please select if your car is fitted with CNG\/LPG from the options given below.', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
-                    options
-                );
-            }
+            // }
+            // else {
+            //     builder.Prompts.choice(
+            //         session,
+            //         'Please select if your car is fitted with CNG\/LPG from the options given below.', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
+            //         options
+            //     );
+            // }
         },
         function(session, results) {
-            isCarFirstTime[0] = false;
+            // isCarFirstTime[0] = false;
             if (results.response) {
                 if (isValidCarCngLpg(results.response["entity"])) {
-                    isCarFirstTime[0] = true;
+                    // isCarFirstTime[0] = true;
                     carCngLpg = results.response["entity"];
                     session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, isInsured, carCost);
                     session.sendBatch();
