@@ -281,7 +281,7 @@ exports.createPrompts = function(bot) {
                 if (isValidCarCngLpg(results.response["entity"])) {
                     // isCarFirstTime[0] = true;
                     carCngLpg = results.response["entity"];
-                    session.send("CarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carModel, carRegCity, carRegYear, carLastTakenClaim, carCost);
+                    session.send("CarMake:%s,\nCarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegCity, carRegYear, carLastTakenClaim, carCost);
                     session.sendBatch();
                     session.endDialog();
                     // main.beginHelpQuery(session);
