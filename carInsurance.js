@@ -10,8 +10,8 @@ var carModel;
 var carRegCity;
 var carRegYear;
 var carLastTakenClaim;
-var carCngLpg;
-var isInsured;
+// var carCngLpg;
+// var isInsured;
 var carCost;
 
 
@@ -236,14 +236,21 @@ exports.createPrompts = function(bot) {
                 if (isValidCarLastClaim(results.response["entity"])) {
                     // isCarFirstTime[0] = true;
                     carLastTakenClaim = results.response["entity"];
-                    if (carLastTakenClaim == "Never") {
-                        isInsured = false;
+//                     if (carLastTakenClaim == "Never") {
+//                         isInsured = false;
+//                     }
+//                     else {
+//                         isInsured = true;
+//                     }
+                    if (carRegNo != ""){
+                        session.send("CarMake:%s,\nCarModel:%s,\nCarRegNo:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegNo,carRegCity, carRegYear, carLastTakenClaim, carCost);
                     }
-                    else {
-                        isInsured = true;
+                    else
+                    {
+                        session.send("CarMake:%s,\nCarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegCity, carRegYear, carLastTakenClaim, carCost);
                     }
+                    session.sendBatch();
                     session.endDialog();
-                    session.beginDialog('/carCngLpg');
                 }
                 else {
                     session.beginDialog('/carLastClaim');
@@ -254,53 +261,53 @@ exports.createPrompts = function(bot) {
             }
         }
     ];
-    var getCarCngLpg = [
-        function(session) {
-            var options = {
-                retryPrompt: 'Please select if your car is fitted with CNG\/LPG from the options given below.',
-                listStyle: builder.ListStyle["button"]
-            };
-            // if (isCarFirstTime[0]) {
-                builder.Prompts.choice(
-                    session,
-                    'Is your Car CNG or LPG?', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
-                    options
-                );
-            // }
-            // else {
-            //     builder.Prompts.choice(
-            //         session,
-            //         'Please select if your car is fitted with CNG\/LPG from the options given below.', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
-            //         options
-            //     );
-            // }
-        },
-        function(session, results) {
-            // isCarFirstTime[0] = false;
-            if (results.response) {
-                if (isValidCarCngLpg(results.response["entity"])) {
-                    // isCarFirstTime[0] = true;
-                    carCngLpg = results.response["entity"];
-                    if (carRegNo != ""){
-                    session.send("CarMake:%s,\nCarModel:%s,\ncarRegNo:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegNo,carRegCity, carRegYear, carLastTakenClaim, carCost);
-                    }
-                    else
-                    {
-                    session.send("CarMake:%s,\nCarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegCity, carRegYear, carLastTakenClaim, carCost);
-                    }
-                    session.sendBatch();
-                    session.endDialog();
-                    // main.beginHelpQuery(session);
-                }
-                else {
-                    session.beginDialog('/carCngLpg');
-                }
-            }
-            else {
-                session.beginDialog('/carCngLpg');
-            }
-        }
-    ];
+//     var getCarCngLpg = [
+//         function(session) {
+//             var options = {
+//                 retryPrompt: 'Please select if your car is fitted with CNG\/LPG from the options given below.',
+//                 listStyle: builder.ListStyle["button"]
+//             };
+//             // if (isCarFirstTime[0]) {
+//                 builder.Prompts.choice(
+//                     session,
+//                     'Is your Car CNG or LPG?', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
+//                     options
+//                 );
+//             // }
+//             // else {
+//             //     builder.Prompts.choice(
+//             //         session,
+//             //         'Please select if your car is fitted with CNG\/LPG from the options given below.', ["Don\'t have CNG\/LPG Kit", "Have Company Fitted", "Have Externally Fitted"],
+//             //         options
+//             //     );
+//             // }
+//         },
+//         function(session, results) {
+//             // isCarFirstTime[0] = false;
+//             if (results.response) {
+//                 if (isValidCarCngLpg(results.response["entity"])) {
+//                     // isCarFirstTime[0] = true;
+//                     carCngLpg = results.response["entity"];
+//                     if (carRegNo != ""){
+//                         session.send("CarMake:%s,\nCarModel:%s,\nCarRegNo:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegNo,carRegCity, carRegYear, carLastTakenClaim, carCost);
+//                     }
+//                     else
+//                     {
+//                         session.send("CarMake:%s,\nCarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegCity, carRegYear, carLastTakenClaim, carCost);
+//                     }
+//                     session.sendBatch();
+//                     session.endDialog();
+//                     // main.beginHelpQuery(session);
+//                 }
+//                 else {
+//                     session.beginDialog('/carCngLpg');
+//                 }
+//             }
+//             else {
+//                 session.beginDialog('/carCngLpg');
+//             }
+//         }
+//     ];
 
     bot.dialog('/carInsurance', askCarRegNo);
     bot.dialog('/carRegNo', getCarRegNo);
@@ -310,7 +317,7 @@ exports.createPrompts = function(bot) {
     bot.dialog('/carYear', getCarYear);
     bot.dialog('/carCost', getCarCost);
     bot.dialog('/carLastClaim', getCarLastClaim);
-    bot.dialog('/carCngLpg', getCarCngLpg);
+//     bot.dialog('/carCngLpg', getCarCngLpg);
 };
 
 exports.beginCarInsurance = function(session, options) {
@@ -337,9 +344,9 @@ exports.beginCarLastClaim = function(session, options) {
     session.beginDialog('/carLastClaim', options || {});
 };
 
-exports.beginCarCngLpg = function(session, options) {
-    session.beginDialog('/carCngLpg', options || {});
-};
+// exports.beginCarCngLpg = function(session, options) {
+//     session.beginDialog('/carCngLpg', options || {});
+// };
 
 function isValidCarRegNo(carRegNo) {
     var vehicleNo = carRegNo.split("-");
@@ -382,7 +389,7 @@ function isValidCarLastClaim(carLastClaim) {
     return true;
 }
 
-function isValidCarCngLpg(carCngLpg) {
-    //TODO: Validate if the car is fitted with CNG LPG or not
-    return true;
-}
+// function isValidCarCngLpg(carCngLpg) {
+//     //TODO: Validate if the car is fitted with CNG LPG or not
+//     return true;
+// }
