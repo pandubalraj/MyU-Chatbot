@@ -262,7 +262,7 @@ bot.dialog('/', [
             if (results.response["index"] == 0) {
 //                 isFirstTime = true;
 //                 session.send("Sure, please hold on " + name + " while we connect you to our Techncial Advisor.");
-//                 session.send("Thank you for your patience. You are now talking with " + generateRandomName() + ". You can ask your queries now.");
+                session.send("You may now select your query.");
                 session.endDialog();
 //                 session.beginDialog('/faqs');
             }
