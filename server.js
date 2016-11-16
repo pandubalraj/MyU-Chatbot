@@ -178,105 +178,106 @@ dialog.matches('Exit', function(session) {
 var isFirstTime = true,
     cases = 0;
 // Create bot root dialog for Bot
-bot.dialog('/', [
-    function(session) {
+// bot.dialog('/', [
+//     function(session) {
         //getting the name
-        if (isFirstTime) {
-            session.send("Hi there,\nit's a pleasure meeting you.");
-            builder.Prompts.text(session, ["May I have your name please.", "Hi! What is your name?", "By the way i didn't get your name.", "May I know how you may be called?"]);
-        }
-        else {
-            switch (cases) {
-                //the below cases 1,2,3 are for wrong names
-                case 1:
-                    builder.Prompts.text(session, "Please enter your full name.");
-                    break;
-                case 2:
-                    builder.Prompts.text(session, "Please enter a valid name.");
-                    break;
-                case 3:
-                    builder.Prompts.text(session, "Please enter your name.");
-                    break;
-                default:
-                    builder.Prompts.text(session, "Please enter a valid name.");
-            }
-        }
-    },
-    function(session, results, next) {
+//         if (isFirstTime) {
+//             session.send("Please let me know what what I may help you with, today?");
+//             builder.Prompts.text(session, ["May I have your name please.", "Hi! What is your name?", "By the way i didn't get your name.", "May I know how you may be called?"]);
+//         }
+//         else {
+//             switch (cases) {
+//                 //the below cases 1,2,3 are for wrong names
+//                 case 1:
+//                     builder.Prompts.text(session, "Please enter your full name.");
+//                     break;
+//                 case 2:
+//                     builder.Prompts.text(session, "Please enter a valid name.");
+//                     break;
+//                 case 3:
+//                     builder.Prompts.text(session, "Please enter your name.");
+//                     break;
+//                 default:
+//                     builder.Prompts.text(session, "Please enter a valid name.");
+//             }
+//         }
+//     },
+//     function(session, results, next) {
         //setting the name and asking how to help
-        isFirstTime = false;
-        if (results.response) {
+//         isFirstTime = false;
+//         if (results.response) {
             //This will run for a valid string
-            if (isNaN(results.response) && isValid(results.response)) {
+//             if (isNaN(results.response) && isValid(results.response)) {
                 //Lets check if it is a full name
-                if (results.response.split(' ').length > 1) {
-                    isFirstTime = true;
-                    name = results.response;
-                    session.send(["Welcome " + name + " it's a pleasure meeting you.", "Hi there,\nit's good to see you, " + name + "."]);
-                    session.endDialog();
-                    session.beginDialog('/helpQuery');
+//                 if (results.response.split(' ').length > 1) {
+//                     isFirstTime = true;
+//                     name = results.response;
+//                     session.send(["Welcome " + name + " it's a pleasure meeting you.", "Hi there,\nit's good to see you, " + name + "."]);
+//                     session.endDialog();
+//                     session.beginDialog('/helpQuery');
 
-                }
-                else {
-                    cases = 1;
-                    session.beginDialog('/');
-                }
-            }
-            else {
-                cases = 2;
-                session.beginDialog('/');
-            }
-        }
-        else {
-            cases = 3;
-            session.beginDialog('/');
-        }
-    }
-]);
+//                 }
+//                 else {
+//                     cases = 1;
+//                     session.beginDialog('/');
+//                 }
+//             }
+//             else {
+//                 cases = 2;
+//                 session.beginDialog('/');
+//             }
+//         }
+//         else {
+//             cases = 3;
+//             session.beginDialog('/');
+//         }
+//     }
+// ]);
 
-bot.dialog('/helpQuery', [
+bot.dialog('/', [
     function(session) {
         var options = {
             retryPrompt: 'Please select with what I can help you today.',
             listStyle: builder.ListStyle["button"]
         };
-        if (isFirstTime) {
+//         if (isFirstTime) {
             builder.Prompts.choice(
                 session,
-                'Please let me know what what I may help you with, today?', ["Do you have question", "Are you looking for an insurance"],
+                'Please let me know what I may help you with, today?', 
+                ["Do you have question", "Are you looking for an insurance"],
                 options
             );
-        }
-        else {
-            builder.Prompts.choice(
-                session,
-                'Please select the appropriate option?', ["Do you have question", "Are you looking for an insurance"],
-                options
-            );
-        }
+//         }
+//         else {
+//             builder.Prompts.choice(
+//                 session,
+//                 'Please select the appropriate option?', ["Do you have question", "Are you looking for an insurance"],
+//                 options
+//             );
+//         }
     },
     function(session, results) {
-        isFirstTime = false;
+//         isFirstTime = false;
         if (results.response) {
             if (results.response["index"] == 0) {
-                isFirstTime = true;
-                session.send("Sure, please hold on " + name + " while we connect you to our Techncial Advisor.");
-                session.send("Thank you for your patience. You are now talking with " + generateRandomName() + ". You can ask your queries now.");
+//                 isFirstTime = true;
+//                 session.send("Sure, please hold on " + name + " while we connect you to our Techncial Advisor.");
+//                 session.send("Thank you for your patience. You are now talking with " + generateRandomName() + ". You can ask your queries now.");
                 session.endDialog();
-                session.beginDialog('/faqs');
+//                 session.beginDialog('/faqs');
             }
             else if (results.response["index"] == 1) {
-                isFirstTime = true;
+//                 isFirstTime = true;
                 session.endDialog();
                 car.beginCarInsurance(session);
                 // session.beginDialog('/insurance');
             }
             else {
-                session.beginDialog('/helpQuery');
+                session.beginDialog('/');
             }
         }
         else {
-            session.beginDialog('/helpQuery');
+            session.beginDialog('/');
         }
     }
 ]);
