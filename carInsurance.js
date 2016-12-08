@@ -243,11 +243,11 @@ exports.createPrompts = function(bot) {
 //                         isInsured = true;
 //                     }
                     if (carRegNo != ""){
-                        session.send("CarMake:%s,\nCarModel:%s,\nCarRegNo:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegNo,carRegCity, carRegYear, carLastTakenClaim, carCost);
+                        session.send("CarMake:%s,CarModel:%s,CarRegNo:%s,CarCity:%s,CarYear:%s,CarLastClaim:%s,CarCost:%s", carMake,carModel, carRegNo,carRegCity, carRegYear, carLastTakenClaim, carCost);
                     }
                     else
                     {
-                        session.send("CarMake:%s,\nCarModel:%s,\nCarCity:%s,\nCarYear:%s,\nCarLastClaim:%s,\nCarCost:%s", carMake,carModel, carRegCity, carRegYear, carLastTakenClaim, carCost);
+                        session.send("CarMake:%s,CarModel:%s,CarCity:%s,CarYear:%s,CarLastClaim:%s,CarCost:%s", carMake,carModel, carRegCity, carRegYear, carLastTakenClaim, carCost);
                     }
                     session.sendBatch();
                     session.endDialog();
